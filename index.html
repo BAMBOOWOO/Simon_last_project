@@ -739,7 +739,6 @@
      JAVASCRIPT
 ============================================= -->
 <script>
-
 /* =====================================
    GOOGLE SHEETS → AUTO DISPLAY MESSAGES
 ===================================== */
@@ -768,6 +767,8 @@ function loadMessages() {
         const message = r.c[3]?.v || "";
         const photo = r.c[4]?.v || "";
 
+        if (!name || !message) return;
+
         const initials = name
           .split(" ")
           .map(w => w[0])
@@ -776,9 +777,9 @@ function loadMessages() {
           .toUpperCase();
 
         const photoHTML = photo
-          ? `<div class="msg-photo">
-               ${photo}
-             </div>`
+          ? `
+            <div class="msg-photo">
+              <img src="${photo}" loading="lazy" ref`
           : "";
 
         container.insertAdjacentHTML("beforeend", `
@@ -800,6 +801,9 @@ function loadMessages() {
           </div>
         `);
       });
+    })
+    .catch(err => {
+      console.error("Google Sheet fetch error:", err);
     });
 }
 
@@ -813,7 +817,10 @@ function handleSubmit() {
   return true;
 }
 
+// Initial load
 loadMessages();
+</script>
+``
 
   // =============================================
   // TRANSLATIONS — zh (default) + en
